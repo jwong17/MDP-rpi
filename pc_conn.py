@@ -75,9 +75,7 @@ class PCSocketAPI(object):
 			print ("<<<<<<<<<<<<<<<<<Read [%s] from PC" %pc_data)
 			if (pc_data == 'quit'):
 				self.close_pc_socket()
-				exit()
-			else:
-				return pc_data
+			return pc_data
 		except Exception as e:
 			print (">================Error: %s " % str(e))
 			self.close_pc_socket()
@@ -89,7 +87,7 @@ class PCSocketAPI(object):
 # 	print ("main")
  #	pc = PCSocketAPI()
  #	pc.init_pc_conn()
-	
+
 #	while True:
 #		send_msg = raw_input()
 #		if(send_msg =="quit"):
@@ -101,6 +99,6 @@ class PCSocketAPI(object):
 #		if (msg==-1):
 #			break
  #		print("data received: %s " % msg)
-		
+
 # 	print("closing sockets")
  #	pc.close_pc_socket()
