@@ -31,9 +31,10 @@ class ArduinoAPI(object):
 		"""
 		Write to arduino
 		"""
+		print msg
 		try:
 			self.ser.write(msg)
-			print ("Write to arduino: %s " %msg)
+			print ("*****************Write to arduino: [%s] **********************" %msg)
 		except AttributeError:
 			print ("Error in serial communication. No value to be written, check connection!!")
 	
@@ -44,7 +45,7 @@ class ArduinoAPI(object):
 		"""	
 		try:
 			received_data = self.ser.readline()
-			print ("Received from arduino: %s " %received_data)
+			print ("*****************Received from arduino: [%s] ************************" %received_data)
 			return received_data
 		except AttributeError:
 			print ("Error in serial connection. No value received, check connection!")

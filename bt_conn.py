@@ -67,6 +67,7 @@ class BluetoothAPI(object):
 		Write message to nexus 7
 		"""
 		try:
+			print(">>>>>>>>>>>>>>>>>>Sending to Nexus 7 [%s]<<<<<<<<<<<<<<<<<<<<"  %message)
 			self.client_socket.send(str(message))
 		except BluetoothError:
 			print ("Bluetooth Error. Connection reset by peer")
@@ -81,7 +82,7 @@ class BluetoothAPI(object):
 		"""
 		try:
 			msg=self.client_socket.recv(2048)
-			print ("Receive[%s] " % msg)
+			print (">>>>>>>>>>>>>>>>>>>>>>Receive[%s] from Nexus 7 <<<<<<<<<<<<<<<<<<<<<<< " % msg)
 			return msg
 		except BluetoothError:
 			print ("Bluetooth Error. Connection reset by peer. Trying to connect...")

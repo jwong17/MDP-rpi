@@ -71,7 +71,7 @@ class PCSocketAPI(object):
 		Read incoming message from PC
 		"""
 		try:
-			pc_data = self.client.recv(40960)
+			pc_data = self.client.recv(46080)
 			print ("<<<<<<<<<<<<<<<<<Read [%s] from PC" %pc_data)
 			if (pc_data == 'quit'):
 				self.close_pc_socket()

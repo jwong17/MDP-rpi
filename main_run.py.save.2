@@ -1,6 +1,6 @@
 import time
 import threading
-#import logging
+import logging
 import Queue
 import os
 
@@ -9,7 +9,7 @@ from sr_conn import *
 from pc_conn import *
 
 
-#logging.basicConfig(level=logging.DEBUG,format='(%(threadName)-10s) %(message)s',)
+logging.basicConfig(level=logging.DEBUG,format='(%(threadName)-10s) %(message)s',)
 class RPIMain(threading.Thread):
 
 
@@ -36,25 +36,22 @@ class RPIMain(threading.Thread):
 		self.pc.init_pc_conn()
 
 		#wait for one sec before start all threads
-	        time.sleep(1)
+        	time.sleep(1)
 
         def read_sr(self, nexus_q, pc_q):
-                #logging.debug('Starting')
-                print "READ SR start"
-		while True:
+                logging.debug('Starting')
+                while True:
 			msg = self.sr.read_from_serial()
 			if msg is not None:
 				#algo_q.put_nowait(msg)
-				#nexus_q.put_nowait(msg)
+				nexus_q.put_nowait(msg)
 				pc_q.put_nowait(msg)
 
-                #logging.debug('Exiting')
-		print "READ SR END"
+                logging.debug('Exiting')
 
 
         def write_sr(self, robot_q):
-                print "WRITE SR START"
-		#logging.debug('Starting')
+                logging.debug('Starting')
 		while True:
 			#check if queue is not empty
 			#If contains something then write to robot
@@ -62,13 +59,11 @@ class RPIMain(threading.Thread):
 
 				msg_to_sr = robot_q.get_nowait()
                			self.sr.write_to_serial(msg_to_sr)
-                #logging.debug('Exiting')
-		print "Write SR End"
+                logging.debug('Exiting')
+
 
         def read_bt(self,robot_q,pc_q):
-                
-		print ("Read bt end")
-		#logging.debug('Starting')
+                logging.debug('Starting')
                 while True:
 			msg_from_bt = self.bt.read_from_bt()
 			print("Reading msg from Nexus 7: [%s]")
@@ -77,45 +72,41 @@ class RPIMain(threading.Thread):
 				robot_q.put_nowait(msg_from_bt)
 				#algo_q.put_nowait(msg_from_bt)
 				pc_q.put_nowait(msg_from_bt)
-                #logging.debug('Exiting')
-		print ("Read Bt end")
+                logging.debug('Exiting')
+
 
         def write_bt(self, nexus_q):
-		print ("Write bt start")
-               	# logging.debug('Starting')
+                logging.debug('Starting')
 		while True:
 			if not nexus_q.empty():
 				msg_to_bt = nexus_q.get_nowait()
                			self.bt.write_to_bt(msg_to_bt)
-                #logging.debug('Exiting')
-		print ("write bt end")
+                logging.debug('Exiting')
+
 
         def read_pc(self, robot_q,nexus_q):
-		print ("Read pc start")
-                #logging.debug('Starting')
+                logging.debug('Starting')
                 while True:
 			msg_from_pc = self.pc.read_from_PC()
-			print (msg_from_pc)
 			if msg_from_pc is not None:
-				if (msg_from_pc[:4] == '#MDF'):
+				if (msg_from_pc[:3].lower() == 'mdp'):
 					nexus_q.put_nowait(msg_from_pc)
 				elif (msg_from_pc == "quit"):
 					exit()
 				else:
 					robot_q.put_nowait(msg_from_pc)
-					nexus_q.put_nowait(msg_from_pc+'#')
-                #logging.debug('Exiting')
-		print ("Read Pc end")
+
+                logging.debug('Exiting')
+
 
         def write_pc(self, pc_q):
-                #logging.debug('Starting')
-		print ("Write PC start")
+                logging.debug('Starting')
 		while True:
 			if not pc_q.empty():
 				msg_to_pc = pc_q.get_nowait()
                			self.pc.write_to_PC(msg_to_pc)
-                #logging.debug('Exiting')
-		print ("Write PC end")
+                logging.debug('Exiting')
+
 
 
         def create_thread(self):
@@ -145,18 +136,8 @@ class RPIMain(threading.Thread):
                 wpc.start()
 
 
-	def keep_main_alive(self):
-		while True:
-			time.sleep(0.5)
 
 if __name__ == '__main__':
         rpiserver = RPIMain()
-       	try:
-		rpiserver.create_thread()
-		rpiserver.keep_main_alive()
-	except KeyboardInterrupt:
-		print("Exiting Main")
-		bt.close_bt_socket()
-		pc.close_pc_socket()
-		
+        rpiserver.create_thread()
 
