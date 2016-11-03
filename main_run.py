@@ -101,7 +101,9 @@ class RPIMain(threading.Thread):
 			print (msg_from_pc)
 			if msg_from_pc is not None:
 				if (msg_from_pc[:2] == 'n7'):
-					nexus_q.put_nowait(msg_from_pc[3:]+'#')
+                                        msg_array = msg_from_pc.split("n7:")[1:]
+                                        for i in range(len(msg_array)):
+                                                nexus_q.put_nowait(msg_array[i]+'#')
 				elif (msg_from_pc == "quit"):
 					exit()
 				else:
