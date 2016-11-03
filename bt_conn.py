@@ -59,6 +59,7 @@ class BluetoothAPI(object):
 		except Exception as e:
 			print ("Connection Error: %s" %str(e))
 			self.close_bt_socket()
+			init_bluetooth()
 			return 0
 
 
@@ -90,18 +91,21 @@ class BluetoothAPI(object):
 			time.sleep(0.5)
 			self.connect_bluetooth() # Reestablish connection
 
-#if __name__ == "__main__":
-#	print ("Running Main")
-#	bt = BluetoothAPI()
-#	bt.init_bluetooth()
+if __name__ == "__main__":
+	print ("Running Main")
+	bt = BluetoothAPI()
+	bt.init_bluetooth()
 
-#	send_msg = raw_input()
-#	print("Write(): %s " %send_msg)
-#	bt.write_to_bt(send_msg)
+
+	send_msg = raw_input()
+	while not(send_msg =='quit'): 
+		print("Write(): %s " %send_msg)
+		bt.write_to_bt(send_msg)
+		send_msg = raw_input()
 
 #	print("read")
 #	print("data received: %s " %bt.read_from_bt())
 
-#	print("closing bluetooth connection")
-#	bt.close_bt_socket()
+	print("closing bluetooth connection")
+	bt.close_bt_socket()
 

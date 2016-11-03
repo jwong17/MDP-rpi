@@ -20,7 +20,7 @@ class RPIMain(threading.Thread):
 		os.system("sudo hciconfig hci0 piscan")
 
         	#Initialize Objects
-		self.bt = BluetoothAPI()
+#		self.bt = BluetoothAPI()
 		self.pc = PCSocketAPI()
 		self.sr = ArduinoAPI()
 
@@ -31,7 +31,7 @@ class RPIMain(threading.Thread):
 		self.toPC_q = Queue.Queue(maxsize=0)
 
 		#Initialize all the damn connections
-		self.bt.init_bluetooth()
+#		self.bt.init_bluetooth()
 		self.sr.init_serial()
 		self.pc.init_pc_conn()
 
@@ -125,23 +125,23 @@ class RPIMain(threading.Thread):
 
                 print("=========Initizaling threads========")
 
-                rbt = threading.Thread(name='Read from BT', target =self.read_bt,args=(self.toRobot_q, self.toPC_q,) )
-                wbt = threading.Thread(name='Write to BT', target =self.write_bt, args=(self.toNexus_q,))
+ #               rbt = threading.Thread(name='Read from BT', target =self.read_bt,args=(self.toRobot_q, self.toPC_q,) )
+  #              wbt = threading.Thread(name='Write to BT', target =self.write_bt, args=(self.toNexus_q,))
                 rsr = threading.Thread(name='Read from Serial', target =self.read_sr, args=( self.toNexus_q, self.toPC_q,))
                 wsr = threading.Thread(name='Write to Serial', target =self.write_sr, args=(self.toRobot_q,))
                 rpc = threading.Thread(name='Read from PC Socket', target =self.read_pc, args=(self.toRobot_q,self.toNexus_q,))
                 wpc = threading.Thread(name='Write to PC Socket', target =self.write_pc, args=(self.toPC_q,))
 
                 print("...........Created threads...........")
-		rbt.daemon = True
-		wbt.daemon = True
+#		rbt.daemon = True
+#		wbt.daemon = True
 		rsr.daemon = True
 		wsr.daemon = True
 		rpc.daemon = True
 		wpc.daemon = True
 
-                rbt.start()
-                wbt.start()
+#                rbt.start()
+#                wbt.start()
                 rsr.start()
                 wsr.start()
                 rpc.start()
@@ -159,7 +159,7 @@ if __name__ == '__main__':
 		rpiserver.keep_main_alive()
 	except KeyboardInterrupt:
 		print("Exiting Main")
-		bt.close_bt_socket()
+#		bt.close_bt_socket()
 		pc.close_pc_socket()
 		
 

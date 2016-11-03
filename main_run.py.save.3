@@ -44,12 +44,10 @@ class RPIMain(threading.Thread):
 		while True:
 			msg = self.sr.read_from_serial()
 			if msg is not None:
-				if (msg[:2]=='PC'):
+				if msg[:2]=='pc':
 				#algo_q.put_nowait(msg)
 				#nexus_q.put_nowait(msg)
-					pc_q.put_nowait(msg[3:])
-				else:
-					print(msg)
+					pc_q.put_nowait(msg)
 
                 #logging.debug('Exiting')
 		print "READ SR END"
